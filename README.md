@@ -2,5 +2,5 @@
 
 Initial scripts for PostgreSQL:
 create database tgbase;
-create user tguser with encrypted password 'Ddp6BS';
+create user tguser with encrypted password 'password';
 grant all privileges on database tgbase to tguser;
