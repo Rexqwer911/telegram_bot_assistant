@@ -1,4 +1,4 @@
-# tg_bot_daily_logger
+# telegram_bot_assistant
 
 Initial scripts for PostgreSQL:
 create user tguser with encrypted password 'password';
