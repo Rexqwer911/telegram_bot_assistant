@@ -5,13 +5,14 @@
 Создан для удобной работы с напоминаниями, заметками, записями о проделанной работе и пр.
 
 Список используемых технологий:
-JDK 17
-Spring Boot 2.7.5
-PostgreSQL
-Project Reactor
+- JDK 17
+- Spring Boot 2.7.5
+- PostgreSQL
+- Project Reactor
 _____________________________________________________
 
 Initial scripts for PostgreSQL:
+```
 create user tguser with encrypted password 'password';
 CREATE DATABASE tgbase
 WITH OWNER = tguser
@@ -21,3 +22,4 @@ WITH OWNER = tguser
    LC_CTYPE = 'en_US.UTF-8'
    CONNECTION LIMIT = -1
    TEMPLATE template0;
+```
