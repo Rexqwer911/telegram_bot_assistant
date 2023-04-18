@@ -1,0 +1,27 @@
+server:
+  port: 8090
+  address: 127.0.0.1
+
+
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/tgbase
+    username:
+    password:
+    hikari:
+      schema: "public"
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+
+  liquibase:
+    change-log: db.changelog/changelog-master.xml
+
+application:
+  telegram:
+    token:
+    username:
+  gpt:
+    token:
