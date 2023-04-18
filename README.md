@@ -1,4 +1,15 @@
-# telegram_bot_assistant
+# Telegram Bot Assistant
+
+Универсальный ассистент на базе телеграм-бота.
+
+Создан для удобной работы с напоминаниями, заметками, записями о проделанной работе и пр.
+
+Список используемых технологий:
+JDK 17
+Spring Boot 2.7.5
+PostgreSQL
+Project Reactor
+_____________________________________________________
 
 Initial scripts for PostgreSQL:
 create user tguser with encrypted password 'password';
