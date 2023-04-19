@@ -32,7 +32,7 @@ public class ScheduledMessageBranchService extends MessageBranchService implemen
     private final UserService userService;
 
     public ScheduledMessageBranchService(ApplicationEventPublisher applicationEventPublisher, MessageBranchRepository messageBranchRepository, ApplicationEventPublisher applicationEventPublisher1, ScheduledService scheduledService, MessageService messageService, ScheduledTaskTypeRepository scheduledTaskTypeRepository, UserService userService) {
-        super(applicationEventPublisher, messageBranchRepository);
+        super(applicationEventPublisher, messageBranchRepository, messageService);
         this.applicationEventPublisher = applicationEventPublisher1;
         this.scheduledService = scheduledService;
         this.messageService = messageService;

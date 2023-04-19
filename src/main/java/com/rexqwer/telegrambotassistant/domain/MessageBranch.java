@@ -1,6 +1,7 @@
 package com.rexqwer.telegrambotassistant.domain;
 
 
+import com.rexqwer.telegrambotassistant.domain.reference.MessageBranchType;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -31,6 +32,13 @@ public class MessageBranch implements Serializable {
      * Признак закрытия ветки
      */
     private Boolean closed;
+
+    /**
+     * Тип сообщения
+     */
+    @ManyToOne
+    @JoinColumn(name = "message_branch_type_id")
+    private MessageBranchType messageBranchType;
 
     /**
      * Дата создания

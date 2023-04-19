@@ -1,7 +1,6 @@
 package com.rexqwer.telegrambotassistant.repository;
 
 import com.rexqwer.telegrambotassistant.domain.reference.MessageBranchType;
-import com.rexqwer.telegrambotassistant.domain.reference.MessageType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -11,5 +10,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MessageBranchTypeRepository extends JpaRepository<MessageBranchType, Long> {
 
-    MessageType findByCode(Integer code);
+    MessageBranchType findByCode(Integer code);
 }

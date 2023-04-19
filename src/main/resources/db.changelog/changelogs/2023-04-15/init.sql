@@ -41,12 +41,14 @@ CREATE TABLE message_branch_type (
                                      value            VARCHAR(255) NOT NULL
 );
 
-INSERT INTO message_branch_type (code, value) VALUES (1, 'SCHEDULED_BRANCH');
+INSERT INTO message_branch_type (code, value) VALUES (1, 'UNDEFINED');
+INSERT INTO message_branch_type (code, value) VALUES (2, 'SCHEDULED_BRANCH');
 
 CREATE TABLE message_branch (
-                                id               BIGSERIAL PRIMARY KEY,
-                                closed           BOOLEAN DEFAULT FALSE,
-                                created_at       TIMESTAMP WITH TIME ZONE NOT NULL
+                                id                       BIGSERIAL PRIMARY KEY,
+                                message_branch_type_id   BIGINT REFERENCES message_branch_type (id) ON DELETE CASCADE NULL,
+                                closed                   BOOLEAN DEFAULT FALSE,
+                                created_at               TIMESTAMP WITH TIME ZONE NOT NULL
 );
 
 CREATE TABLE message (

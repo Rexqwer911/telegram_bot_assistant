@@ -29,7 +29,7 @@ public class Message implements Serializable {
      * Тип сообщения
      */
     @ManyToOne
-    @JoinColumn(name = "message_type_id", nullable = false)
+    @JoinColumn(name = "message_type_id")
     private MessageType messageType;
 
     /**
