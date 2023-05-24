@@ -2,46 +2,42 @@ package com.rexqwer.telegrambotassistant.service.branch;
 
 import com.rexqwer.telegrambotassistant.domain.Message;
 import com.rexqwer.telegrambotassistant.domain.MessageBranch;
-import com.rexqwer.telegrambotassistant.domain.reference.MessageBranchType;
 import com.rexqwer.telegrambotassistant.enums.MessageBranchTypeEnum;
-import com.rexqwer.telegrambotassistant.repository.MessageBranchTypeRepository;
-import com.rexqwer.telegrambotassistant.service.branch.scheduled.ScheduledMessageBranchService;
+import com.rexqwer.telegrambotassistant.event.SendMessageEvent;
+import com.rexqwer.telegrambotassistant.repository.MessageBranchRepository;
+import com.rexqwer.telegrambotassistant.service.message.MessageService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
-
-import javax.annotation.PostConstruct;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardRemove;
 
 @Service
-@Slf4j
 @RequiredArgsConstructor
 public class MessageBranchSelector {
 
-    private final ScheduledMessageBranchService scheduledMessageBranchService;
-    private final MessageBranchTypeRepository messageBranchTypeRepository;
-    private MessageBranchType undefinedType;
-
-    @PostConstruct
-    public void init() {
-        undefinedType = messageBranchTypeRepository.findByCode(MessageBranchTypeEnum.UNDEFINED.getCode());
-    }
+    private final MessageBranchService messageBranchService;
+    private final MessageBranchRepository messageBranchRepository;
+    private final MessageService messageService;
+    private final ReminderBranchService reminderBranchService;
+    private final ChatGPTMessageBranchService chatGPTMessageBranchService;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     public void process(Message message) {
-
-
-        MessageBranch messageBranch = scheduledMessageBranchService.processMessageBranch(message);
-
-        Message updatedMessage = messageBranch.getMessages().stream()
-                .filter(m -> m.getId().equals(message.getId()))
-                .findFirst()
-                .orElseThrow();
-
-//        if (messageBranch.getMessages().size() == 1) {
-//            if (messageBranch.getMessageBranchType() == null) {
-//                messageBranch.setMessageBranchType(undefinedType);
-//            }
-//        } else {
-//
-//        }
+        MessageBranch messageBranch = messageBranchService.defineMessageBranch(message);
+        if (messageBranch != null) {
+            messageService.assignMessageBranch(message, messageBranch);
+            messageBranch = messageBranchRepository.findById(messageBranch.getId()).orElseThrow();
+            if (messageBranch.getMessageBranchType().getCode().equals(MessageBranchTypeEnum.REMINDER_BRANCH.getCode())) {
+                reminderBranchService.processNewMessage(messageBranch);
+            } else if (messageBranch.getMessageBranchType().getCode().equals(MessageBranchTypeEnum.GPT_BRANCH.getCode())) {
+                chatGPTMessageBranchService.processNewMessage(messageBranch);
+            }
+        } else {
+            applicationEventPublisher.publishEvent(new SendMessageEvent(
+                    "Не понял",
+                    message.getChatId(),
+                    ReplyKeyboardRemove.builder().removeKeyboard(true).build())
+            );
+        }
     }
 }

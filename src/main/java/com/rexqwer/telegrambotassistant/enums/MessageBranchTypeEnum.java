@@ -2,8 +2,8 @@ package com.rexqwer.telegrambotassistant.enums;
 
 public enum MessageBranchTypeEnum {
 
-    UNDEFINED(1),
-    SCHEDULED_BRANCH(2);
+    REMINDER_BRANCH(1),
+    GPT_BRANCH(2);
 
     private final Integer code;
 

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Spring Data PostgreSQL репозиторий для {@link Message}.
@@ -16,4 +17,5 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
 
     List<Message> findAllByCreatedAtBetweenAndMessageTypeOrderByCreatedAtDesc(LocalDateTime from, LocalDateTime to, MessageType messageType);
 
+    Optional<Message> findByMessageId(String messageId);
 }

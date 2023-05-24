@@ -16,17 +16,21 @@ public class MessageTypeService {
     private final MessageTypeRepository messageTypeRepository;
     private MessageType unknownMessage;
     private MessageType logMessage;
+    private MessageType commandMessage;
 
     @PostConstruct
     public void init() {
         unknownMessage = messageTypeRepository.findByCode(MessageTypeEnum.UNKNOWN.getCode());
         logMessage = messageTypeRepository.findByCode(MessageTypeEnum.LOG.getCode());
+        commandMessage = messageTypeRepository.findByCode(MessageTypeEnum.COMMAND.getCode());
     }
 
     public MessageType defineMessageType(String text) {
         MessageType messageType;
         if (text.matches(MessageTypeEnum.LOG.getPattern())) {
             messageType = logMessage;
+        } else if (text.startsWith("/")) {
+            messageType = commandMessage;
         } else {
             messageType = unknownMessage;
         }

@@ -14,6 +14,14 @@ public class ApplicationProperties {
     public static class Telegram {
         private String token;
         private String username;
+        private Voice voice;
+    }
+
+    @Data
+    public static class Voice {
+        private Boolean active;
+        private String downloadPath;
+        private String wavPath;
     }
 
     @Data

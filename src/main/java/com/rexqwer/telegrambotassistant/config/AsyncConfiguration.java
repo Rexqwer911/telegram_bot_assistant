@@ -19,7 +19,7 @@ public class AsyncConfiguration {
         executor.setCorePoolSize(2);
         executor.setMaxPoolSize(50);
         executor.setQueueCapacity(1000);
-        executor.setThreadNamePrefix("application-task-");
+        executor.setThreadNamePrefix("app-task-");
         return executor;
     }
 }

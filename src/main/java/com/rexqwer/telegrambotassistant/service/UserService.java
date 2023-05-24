@@ -40,7 +40,6 @@ public class UserService {
             newUser.setTgId(from.getId().toString());
             newUser.setFirstName(from.getFirstName());
             newUser.setLastName(from.getLastName());
-            newUser.setIsBot(from.getIsBot());
             newUser.setUserName(from.getUserName());
             newUser.setRoles(Collections.singleton(defaultRole));
             return userRepository.save(newUser);

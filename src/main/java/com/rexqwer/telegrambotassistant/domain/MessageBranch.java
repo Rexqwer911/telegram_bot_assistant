@@ -1,6 +1,5 @@
 package com.rexqwer.telegrambotassistant.domain;
 
-
 import com.rexqwer.telegrambotassistant.domain.reference.MessageBranchType;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,7 +23,19 @@ public class MessageBranch implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "messageBranch", cascade = CascadeType.ALL)
+    /**
+     * Пользователь
+     */
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    /**
+     * id чата, в котором содержится ветка
+     */
+    private String chatId;
+
+    @OneToMany(mappedBy = "messageBranch", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @OrderBy("createdAt ASC")
     private List<Message> messages = new ArrayList<>();
 
@@ -32,6 +43,11 @@ public class MessageBranch implements Serializable {
      * Признак закрытия ветки
      */
     private Boolean closed;
+
+    /**
+     * Признак закрытия ветки
+     */
+    private Boolean locked;
 
     /**
      * Тип сообщения
@@ -44,4 +60,12 @@ public class MessageBranch implements Serializable {
      * Дата создания
      */
     private LocalDateTime createdAt;
+
+    public int getLastMessageIdx() {
+        return messages.size() - 1;
+    }
+
+    public Message getMessageByIdx(int idx) {
+        return messages.get(idx);
+    }
 }

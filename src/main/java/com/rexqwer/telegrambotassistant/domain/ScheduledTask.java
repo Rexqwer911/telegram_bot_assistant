@@ -55,6 +55,11 @@ public class ScheduledTask implements Serializable {
     private String cronPattern;
 
     /**
+     * Настойчивое задание
+     */
+    private Boolean insistent;
+
+    /**
      * Сообщение
      */
     @OneToOne

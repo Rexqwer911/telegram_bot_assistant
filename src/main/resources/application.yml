@@ -1,23 +1,38 @@
-server:
-  port: 8090
-  address: 127.0.0.1
-
-
 spring:
+  profiles:
+    active: @spring.profiles.active@
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/tgbase
+    url:
     username:
     password:
     hikari:
       schema: "public"
 
+  flyway:
+    driver-class-name: org.postgresql.Driver
+    url:
+    user:
+    password:
+    baseline-on-migrate: true
+
   jpa:
     hibernate:
       ddl-auto: validate
 
-  liquibase:
-    change-log: db.changelog/changelog-master.xml
+logging:
+  level:
+    org:
+      flywaydb:
+        core:
+          internal:
+            license:
+              VersionPrinter: OFF
+      springframework:
+        data:
+          repository:
+            config:
+              RepositoryConfigurationExtensionSupport: OFF
 
 application:
   telegram:

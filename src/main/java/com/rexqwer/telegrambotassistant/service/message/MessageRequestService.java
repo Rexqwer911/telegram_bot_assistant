@@ -23,4 +23,6 @@ public class MessageRequestService {
         messageRequestRepository.save(messageRequest);
         log.info("Сообщение от {}: {}", user.getUserName(), message.getText());
     }
+
+    //TODO: Добавить сохранение request для голосовых
 }

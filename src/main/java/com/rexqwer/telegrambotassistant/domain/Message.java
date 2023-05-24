@@ -33,11 +33,25 @@ public class Message implements Serializable {
     private MessageType messageType;
 
     /**
+     * Пользователь
+     */
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    /**
      * Ветка сообщений, к которой принадлежит само сообщение
      */
     @ManyToOne
     @JoinColumn(name = "message_branch_id")
     private MessageBranch messageBranch;
+
+    /**
+     * Ветка сообщений, к которой принадлежит само сообщение
+     */
+    @ManyToOne
+    @JoinColumn(name = "scheduled_task_id")
+    private ScheduledTask scheduledTask;
 
     /**
      * Дата создания

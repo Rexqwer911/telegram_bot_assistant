@@ -48,11 +48,6 @@ public class User implements Serializable {
      */
     private String lastName;
 
-     /**
-     * Является ли ботом
-     */
-    private Boolean isBot;
-
     /**
      * Логин телеграм
      */

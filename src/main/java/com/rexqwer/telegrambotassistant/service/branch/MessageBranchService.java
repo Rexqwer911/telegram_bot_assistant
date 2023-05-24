@@ -2,46 +2,63 @@ package com.rexqwer.telegrambotassistant.service.branch;
 
 import com.rexqwer.telegrambotassistant.domain.Message;
 import com.rexqwer.telegrambotassistant.domain.MessageBranch;
+import com.rexqwer.telegrambotassistant.domain.reference.MessageBranchType;
 import com.rexqwer.telegrambotassistant.event.SendMessageEvent;
 import com.rexqwer.telegrambotassistant.repository.MessageBranchRepository;
-import com.rexqwer.telegrambotassistant.service.message.MessageService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardRemove;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class MessageBranchService {
 
     private final ApplicationEventPublisher applicationEventPublisher;
     private final MessageBranchRepository messageBranchRepository;
-    private final MessageService messageService;
 
-    public MessageBranchService(ApplicationEventPublisher applicationEventPublisher, MessageBranchRepository messageBranchRepository, MessageService messageService) {
-        this.applicationEventPublisher = applicationEventPublisher;
-        this.messageBranchRepository = messageBranchRepository;
-        this.messageService = messageService;
-    }
-
-    public MessageBranch processMessageBranch(Message message) {
-        MessageBranch activeBranch = findActiveBranch(message);
+    public MessageBranch processNewMessageBranch(Message message, MessageBranchType messageBranchType) {
+        MessageBranch activeBranch = closeAllBranchesAndCreateNew(message);
         activeBranch.setClosed(false);
+        activeBranch.setLocked(false);
         activeBranch.setCreatedAt(message.getCreatedAt());
-        activeBranch = messageBranchRepository.save(activeBranch);
-
-        message.setMessageBranch(activeBranch);
-        message = messageService.saveMessage(message);
-
-        List<Message> messages = activeBranch.getMessages();
-        messages.add(message);
+        activeBranch.setUser(message.getUser());
+        activeBranch.setChatId(message.getChatId());
+        activeBranch.setMessageBranchType(messageBranchType);
         return messageBranchRepository.save(activeBranch);
     }
 
+    public MessageBranch defineMessageBranch(Message message) {
+        MessageBranch activeBranch = findActiveBranch(message);
+        if (activeBranch.getId() != null) {
+            return activeBranch;
+        } else {
+            return null;
+        }
+    }
+
+    public void closeMessageBranch(Message message) {
+        applicationEventPublisher.publishEvent(new SendMessageEvent(
+                "Ветка сообщений " + message.getMessageBranch().getMessageBranchType().getValue() + " закрыта.",
+                message.getChatId(),
+                ReplyKeyboardRemove.builder().removeKeyboard(true).build()));
+        MessageBranch messageBranch = message.getMessageBranch();
+        messageBranch.setClosed(true);
+        messageBranchRepository.save(messageBranch);
+    }
+
+    private MessageBranch closeAllBranchesAndCreateNew(Message message) {
+        List<MessageBranch> activeBranches = messageBranchRepository.findAllByUserAndClosedFalse(message.getUser());
+        Mono.just(activeBranches).subscribe(this::closeAndSaveAll);
+        return new MessageBranch();
+    }
     private MessageBranch findActiveBranch(Message message) {
-        List<MessageBranch> activeBranches = messageBranchRepository.findAllByClosedFalse();
+        List<MessageBranch> activeBranches = messageBranchRepository.findAllByUserAndClosedFalse(message.getUser());
         int activeBranchesCount = activeBranches.size();
         if (activeBranchesCount == 0) {
             return new MessageBranch();
@@ -50,12 +67,13 @@ public class MessageBranchService {
         } else {
             applicationEventPublisher.publishEvent(new SendMessageEvent("Обнаружено более одной ветки сообщений. " +
                     "Они будут закрыты, создана новая ветка.", message.getChatId()));
-            Mono.just(activeBranches).subscribe(this::deleteBranches);
+            Mono.just(activeBranches).subscribe(this::closeAndSaveAll);
             return new MessageBranch();
         }
     }
 
-    private void deleteBranches(List<MessageBranch> branches) {
-        messageBranchRepository.deleteAll(branches);
+    private void closeAndSaveAll(List<MessageBranch> branches) {
+        branches.forEach(messageBranch -> messageBranch.setClosed(true));
+        messageBranchRepository.saveAll(branches);
     }
 }

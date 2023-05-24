@@ -3,7 +3,8 @@ package com.rexqwer.telegrambotassistant.enums;
 public enum RoleEnum {
 
     DEFAULT(1),
-    ADMIN(2);
+    ADMIN(2),
+    SYSTEM(3);
 
     private final Integer code;
 

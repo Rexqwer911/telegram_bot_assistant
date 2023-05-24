@@ -1,0 +1,56 @@
+"action": "/reminder", "text": "Панель управления напоминаниями", "buttons": ["Создать новое напоминание", "Список напоминаний", "Отключить напоминание", "Выход"]
+
+	"action": "Создать новое напоминание", "text": "Выберите тип нового напоминания", "buttons": ["Ежедневное", "По будням", "Еженедельно", "Отмена"]
+
+		"action": "Ежедневное", "text": "Введите время, в которое необходимо создать напоминание в формате 21:00", "buttons": ["Отмена"]
+			"action": "val", "text": "Введите текст напоминания", "buttons": ["Отмена"], "validator": "timeValidator"
+				"action": "val", "text": "Сделать настойчивым?", "buttons": ["Да","Нет","Отмена"]
+					"action": "Да" -> (createRemind) -> (branchSource)
+					"action": "Нет" -> (createRemind) -> (branchSource)
+					"command": "Отмена", "text": "Создание напоминания отменено" -> (branchSource)
+
+				"command": "Отмена", "text": "Создание напоминания отменено" -> (branchSource)
+
+			"command": "Отмена", "text": "Создание напоминания отменено" -> (branchSource)
+
+		"action": "По будням", "text": "Введите время, в которое необходимо создать напоминание в формате 21:00", "buttons": ["Отмена"]
+			"action": "val", "text": "Введите текст напоминания", "buttons": ["Отмена"], "validator": "timeValidator"
+				"action": "Лог", "text": "Сделать настойчивым?", "buttons": ["Да","Нет","Отмена"]
+					"action": "Да" -> (createRemind) -> (branchSource)
+					"action": "Нет" -> (createRemind) -> (branchSource)
+					"command": "Отмена", "text": "Создание напоминания Лог отменено" -> (branchSource)
+
+				"action": "val", "text": "Сделать настойчивым?", "buttons": ["Да","Нет","Отмена"]
+					"action": "Да" -> (createRemind) -> (branchSource)
+					"action": "Нет" -> (createRemind) -> (branchSource)
+					"command": "Отмена", "text": "Создание напоминания отменено" -> (branchSource)
+
+				"command": "Отмена", "text": "Создание напоминания отменено" -> (branchSource)
+
+			"command": "Отмена", "text": "Создание напоминания отменено" -> (branchSource)
+
+		"action": "Еженедельно", "text": "Введите день недели, например, Вторник", "buttons": ["Отмена"]
+			"action": "val", "text": "Введите время, в которое необходимо создать напоминание в формате 21:00", "buttons": ["Отмена"], "validator": "weekdayValidator"
+				"action": "val", "text": "Введите текст напоминания", "buttons": ["Отмена"], "validator": "timeValidator"
+
+					"action": "val", "text": "Сделать настойчивым?", "buttons": ["Да","Нет","Отмена"]
+						"action": "Да" -> (createRemind) -> (branchSource)
+						"action": "Нет" -> (createRemind) -> (branchSource)
+						"command": "Отмена", "text": "Создание напоминания отменено" -> (branchSource)
+					"command": "Отмена", "text": "Создание напоминания отменено" -> (branchSource)
+
+				"command": "Отмена", "text": "Создание напоминания отменено" -> (branchSource)
+
+			"command": "Отмена", "text": "Создание напоминания отменено" -> (branchSource)
+
+		"command": "Отмена", "text": "Создание напоминания отменено" -> (branchSource)
+
+	"action": "Список напоминаний" -> (remindList)
+
+	"action": "Отключить напоминание", "text": "Введите id одного напоминания, которое хотите отключить, либо, перечислите их через запятую", "buttons": ["Отмена"]
+		"action": "val" -> (deactivateRemind)
+		"command": "Отмена" -> (branchSource)
+
+	"action": "Выход" -> (closeBranch)
+
+	(default) "text": "Не распознана команда" -> (branchSource)
