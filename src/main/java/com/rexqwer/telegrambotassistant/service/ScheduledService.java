@@ -135,7 +135,7 @@ public class ScheduledService {
     private LocalDateTime getNextStartTime(ScheduledTask scheduledTask, boolean insistently) {
         String cronPattern;
         if (insistently) {
-            cronPattern = "0/10 * * * * *";
+            cronPattern = "* 0/30 * * * *";
         } else {
             cronPattern = scheduledTask.getCronPattern();
         }

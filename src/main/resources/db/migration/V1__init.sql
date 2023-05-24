@@ -44,9 +44,8 @@ CREATE TABLE message_branch_type (
                                      value            VARCHAR(255) NOT NULL
 );
 
-INSERT INTO message_branch_type (code, value) VALUES (1, 'UNDEFINED');
-INSERT INTO message_branch_type (code, value) VALUES (2, 'SCHEDULED_BRANCH');
-INSERT INTO message_branch_type (code, value) VALUES (3, 'GPT_BRANCH');
+INSERT INTO message_branch_type (code, value) VALUES (1, 'REMINDER_BRANCH');
+INSERT INTO message_branch_type (code, value) VALUES (2, 'GPT_BRANCH');
 
 CREATE TABLE message_branch (
                                 id                       BIGSERIAL PRIMARY KEY,
