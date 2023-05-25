@@ -20,6 +20,7 @@ public class MessageRequestService {
         messageRequest.setUser(user);
         messageRequest.setCreatedAt(message.getCreatedAt());
         messageRequest.setMessage(message);
+
         messageRequestRepository.save(messageRequest);
         log.info("Сообщение от {}: {}", user.getUserName(), message.getText());
     }

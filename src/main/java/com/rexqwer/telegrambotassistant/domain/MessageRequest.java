@@ -44,4 +44,10 @@ public class MessageRequest implements Serializable {
     @JoinColumn(name = "message_id", nullable = false)
     private Message message;
 
+    /**
+     * Id чата, из которого пришло сообщение
+     */
+    private String chatId;
+
+
 }

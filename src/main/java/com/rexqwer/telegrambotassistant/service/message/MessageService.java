@@ -89,4 +89,8 @@ public class MessageService {
             return userRepository.save(newUser);
         }
     }
+
+    public User findUserByChatId(String chatId) {
+        return messageRepository.findFirstByChatIdOrderByCreatedAtAsc(chatId).map(Message::getUser).orElse(null);
+    }
 }

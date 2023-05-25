@@ -38,5 +38,11 @@ application:
   telegram:
     token:
     username:
+    voice:
+      active: false
+      download-path:
+      wav-path:
+      decrypted-path:
+      ffmpeg-path:
   gpt:
     token:

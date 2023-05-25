@@ -18,4 +18,6 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
     List<Message> findAllByCreatedAtBetweenAndMessageTypeOrderByCreatedAtDesc(LocalDateTime from, LocalDateTime to, MessageType messageType);
 
     Optional<Message> findByMessageId(String messageId);
+
+    Optional<Message> findFirstByChatIdOrderByCreatedAtAsc(String chatId);
 }

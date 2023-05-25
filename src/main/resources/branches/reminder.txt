@@ -48,7 +48,7 @@
 	"action": "Список напоминаний" -> (remindList)
 
 	"action": "Отключить напоминание", "text": "Введите id одного напоминания, которое хотите отключить, либо, перечислите их через запятую", "buttons": ["Отмена"]
-		"action": "val" -> (deactivateRemind)
+		"action": "val" -> (deactivateReminds)
 		"command": "Отмена" -> (branchSource)
 
 	"action": "Выход" -> (closeBranch)

@@ -133,13 +133,13 @@ public class ScheduledService {
     }
 
     private LocalDateTime getNextStartTime(ScheduledTask scheduledTask, boolean insistently) {
-        String cronPattern;
+        LocalDateTime next;
         if (insistently) {
-            cronPattern = "* 0/30 * * * *";
+            next = LocalDateTime.now().plus(30, ChronoUnit.MINUTES);
         } else {
-            cronPattern = scheduledTask.getCronPattern();
+            next = CronExpression.parse(scheduledTask.getCronPattern()).next(LocalDateTime.now());
         }
-        CronExpression cronExpression = CronExpression.parse(cronPattern);
-        return cronExpression.next(LocalDateTime.now());
+        log.info("Получили новое время запуска {}", next);
+        return next;
     }
 }

@@ -22,6 +22,8 @@ public class ApplicationProperties {
         private Boolean active;
         private String downloadPath;
         private String wavPath;
+        private String decryptedPath;
+        private String ffmpegPath;
     }
 
     @Data

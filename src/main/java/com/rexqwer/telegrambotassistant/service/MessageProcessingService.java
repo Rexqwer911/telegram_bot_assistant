@@ -47,8 +47,12 @@ public class MessageProcessingService {
                     messageBranchSelector.process(message);
                 }
             } else {
-                if (update.getMessage().hasVoice() && applicationProperties.getTelegram().getVoice().getActive()) {
-                    voiceMessageService.downloadVoiceMessage(update.getMessage().getVoice().getFileId(), user);
+                if (update.getMessage().hasVoice()) {
+                    if (applicationProperties.getTelegram().getVoice().getActive()) {
+                        voiceMessageService.downloadVoiceMessage(update.getMessage().getVoice().getFileId(), user, update.getMessage().getChatId().toString());
+                    } else {
+                        log.info("Скачивание голосовых отключено");
+                    }
                 } else {
                     log.error("undefined update message");
                 }

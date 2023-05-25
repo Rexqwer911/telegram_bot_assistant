@@ -9,21 +9,17 @@ import com.rexqwer.telegrambotassistant.service.ScheduledService;
 import com.rexqwer.telegrambotassistant.service.TelegramBotComponent;
 import com.rexqwer.telegrambotassistant.service.VoiceMessageService;
 import com.rexqwer.telegrambotassistant.service.message.MessageResponseService;
-import com.rexqwer.telegrambotassistant.service.message.MessageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class ApplicationEventListener {
 
-    private final ApplicationProperties applicationProperties;
     private final MessageProcessingService messageProcessingService;
     private final MessageResponseService messageResponseService;
     private final TelegramBotComponent telegramBotComponent;
@@ -69,15 +65,8 @@ public class ApplicationEventListener {
     @Async
     @EventListener
     public void handleDownloadVoiceMessageEvent(TelegramBotDownloadVoiceMessageEvent event) {
-        String fileUrl = telegramBotComponent.getFileUrl(event.getFileId());
-        String oggFileName = applicationProperties.getTelegram().getVoice().getDownloadPath() + event.getFileName();
-        String wavFileName = applicationProperties.getTelegram().getVoice().getWavPath() + event.getFileName();
-        try {
-            voiceMessageService.downloadFile(fileUrl, oggFileName + ".ogg");
-            voiceMessageService.convertWav(oggFileName + ".ogg", wavFileName + ".wav");
-        } catch (IOException e) {
-            log.error("Error downloading file: " + event.getFileName(), e);
-        }
+        voiceMessageService.processVoiceMessage(event.getFileName(),
+                telegramBotComponent.getFileUrl(event.getFileId()), event.getChatId());
     }
 }
 
