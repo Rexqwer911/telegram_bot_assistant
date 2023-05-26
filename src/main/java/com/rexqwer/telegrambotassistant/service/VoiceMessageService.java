@@ -45,7 +45,7 @@ public class VoiceMessageService {
 
         String oggFilePath = applicationProperties.getTelegram().getVoice().getDownloadPath() + fileName + ".ogg";
         String wavFilePath = applicationProperties.getTelegram().getVoice().getWavPath() + fileName + ".wav";
-        String txtFilePath = applicationProperties.getTelegram().getVoice().getDecryptedPath() + fileName + ".txt";
+        String txtFilePath = applicationProperties.getTelegram().getVoice().getDecryptedPath();// + fileName + ".txt";
 
         boolean ok = true;
 
@@ -64,16 +64,28 @@ public class VoiceMessageService {
             } catch (EncoderException e) {
                 if (e.getMessage().contains("/tmp/jave/ffmpeg-amd64-3.3.1")) {
                     log.info("Попытка копировать исполняемый файл ffmpeg");
-                    copyFfmpeg();
+                    boolean res = copyFfmpeg();
+                    if (res) {
+                        try {
+                            convertWav(oggFilePath, wavFilePath);
+                        } catch (EncoderException er) {
+                            log.error("Ошибка при конвертации ogg файла {} в wav: {}", fileName, er.getMessage(), er);
+                            ok = false;
+                        }
+                    } else {
+                        ok = false;
+                    }
+                } else {
+                    log.error("Ошибка при конвертации ogg файла {} в wav: {}", fileName, e.getMessage(), e);
+                    ok = false;
                 }
-                log.error("Ошибка при конвертации ogg файла {} в wav: {}", fileName, e.getMessage(), e);
-                ok = false;
             }
         }
 
         if (ok) {
             try {
-                decryptVoiceMessage(wavFilePath, txtFilePath);
+                //decryptVoiceMessage(wavFilePath, txtFilePath);
+                decryptVoiceMessageWhisper(wavFilePath, txtFilePath);
                 log.info("Расшифровали wav файл {}", fileName);
             } catch (IOException | InterruptedException e) {
                 log.error("Ошибка при расшифровке файла: " + fileName, e);
@@ -83,10 +95,11 @@ public class VoiceMessageService {
 
         if (ok) {
             try {
-                String content = Files.readString(Paths.get(txtFilePath), StandardCharsets.UTF_8);
+                String content = Files.readString(Paths.get(txtFilePath + fileName + ".txt"), StandardCharsets.UTF_8);
+                log.info("Вычитали расшифрованное сообщение {}", content);
                 applicationEventPublisher.publishEvent(new SendMessageEvent(content, chatId));
             } catch (IOException e) {
-                e.printStackTrace();
+                log.error("Не удалось вычитать расшифрованный файл txt {}", fileName, e);
             }
 
         }
@@ -96,7 +109,7 @@ public class VoiceMessageService {
         URL fileUrl = new URL(url);
         try (InputStream inputStream = fileUrl.openStream();
              ReadableByteChannel readableByteChannel = Channels.newChannel(inputStream);
-             FileOutputStream outputStream = new FileOutputStream(filePath);
+             FileOutputStream outputStream = new FileOutputStream(filePath)
         ) {
             outputStream.getChannel().transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
         }
@@ -124,22 +137,23 @@ public class VoiceMessageService {
         return encodingAttributes;
     }
 
-    private void decryptVoiceMessage(String wavFilePath, String txtFilePath) throws IOException, InterruptedException {
-        // Создание объекта ProcessBuilder с командой и аргументами
-        ProcessBuilder processBuilder = new ProcessBuilder("spchcat", "--language=ru_RU", wavFilePath);
+    private void decryptVoiceMessageWhisper(String wavFilePath, String txtFilePath) throws IOException, InterruptedException {
+        String command = "whisper " + wavFilePath +" --model base --language Russian -o "+ txtFilePath +" -f txt";
 
-        // Перенаправление вывода в файл
-        processBuilder.redirectOutput(ProcessBuilder.Redirect.to(new File(txtFilePath)));
+        ProcessBuilder processBuilder = new ProcessBuilder();
+        processBuilder.command("bash", "-c", command);
 
-        // Запуск процесса
         Process process = processBuilder.start();
-
-        // Ожидание завершения процесса
         int exitCode = process.waitFor();
-        log.info("Успешно расшифровали голосовое сообщение {}", txtFilePath);
+
+        if (exitCode == 0) {
+            log.info("Успешно расшифровали голосовое сообщение {}", txtFilePath);
+        } else {
+            log.error("Command execution failed with exit code: " + exitCode);
+        }
     }
 
-    private void copyFfmpeg() {
+    private boolean copyFfmpeg() {
         try {
             ProcessBuilder processBuilder = new ProcessBuilder("cp",
                     applicationProperties.getTelegram().getVoice().getFfmpegPath(),
@@ -147,8 +161,10 @@ public class VoiceMessageService {
             Process process = processBuilder.start();
             process.waitFor();
             log.info("Успешно переместили исполняемый файл ffmpeg");
+            return true;
         } catch (InterruptedException | IOException e) {
             log.error("Не удалось копировать файл ffmpeg");
+            return false;
         }
     }
 }
