@@ -1,0 +1,14 @@
+stages:
+  - build
+  - deploy
+
+build-job:
+  stage: build
+  script:
+    - mvn clean install -Pprod
+
+deploy-job:
+  stage: deploy
+  script:
+    - echo "Deploying application..."
+    - echo "Application successfully deployed."
