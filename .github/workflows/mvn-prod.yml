@@ -27,15 +27,8 @@ jobs:
     - name: Step 4 - List of the files in /target directory
       run: ls -a "${{ secrets.TEST_FLDR }}"
 
-    - name: Step 5 - Install SSH Client
-      run: sudo apt-get install openssh-client -y
+    - name: Step 5 - Install SSHPASS
+      run: sudo apt-get update -qq && apt-get install -y -qq sshpass
 
-    - name: Step 6 - Copy SSH Key
-      run: |
-        mkdir -p ~/.ssh
-        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-        chmod 600 ~/.ssh/id_rsa
-        ssh-keyscan "${{ secrets.SRV_HOST }}" >> ~/.ssh/known_hosts
-
-    - name: Step 7 - Transfer File via SSH
-      run: scp -o StrictHostKeyChecking=no -P 22 ./target/tgapp.jar "${{ secrets.SRV_CREDS }}":"${{ secrets.DEST_FOLDER }}"
+    - name: Step 6 - Transfer File via SSH
+      run: sshpass -e scp -o StrictHostKeyChecking=no "${{ secrets.BLD_FLDR }}" "${{ secrets.SRV_CREDS }}":"${{ secrets.DEST_FOLDER }}"
