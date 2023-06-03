@@ -32,15 +32,17 @@ jobs:
         key: ${{ secrets.SERVER_RSA }}
         port: 22
         source: ${{ secrets.BUILD_FOLDER }}
-        target: ${{ secrets.SERVER_JAR_PATH }}
+        target: ${{ secrets.SERVER_MV_JAR_PATH }}
 
-#    - name: Step 5 - SSH execution restart scripts
-#      uses: appleboy/ssh-action@master
-#      with:
-#        host: ${{ secrets.SERVER_HOST }}
-#        username: ${{ secrets.SERVER_USER }}
-#        key: ${{ secrets.SERVER_RSA }}
-#        port: 22
-#        script: |
-#          stop.sh
-#          start.sh
+    - name: Step 5 - SSH execution restart scripts
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SERVER_HOST }}
+        username: ${{ secrets.SERVER_USER }}
+        key: ${{ secrets.SERVER_RSA }}
+        port: 22
+        script: |
+          stop.sh
+          cd ${{ secrets.SERVER_MV_JAR_PATH }}
+          mv ${{ secrets.BUILD_FOLDER }} ${{ secrets.SERVER_JAR_PATH }}
+          start.sh
