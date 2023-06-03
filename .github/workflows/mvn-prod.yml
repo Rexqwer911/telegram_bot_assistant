@@ -27,8 +27,11 @@ jobs:
     - name: Step 4 - List of the files in /target directory
       run: ls -a "${{ secrets.TEST_FLDR }}"
 
-    - name: Step 5 - Install SSHPASS
-      run: apt-get install -y -qq sshpass
-
-    - name: Step 6 - Transfer File via SSH
-      run: sshpass -e scp -o StrictHostKeyChecking=no "${{ secrets.BLD_FLDR }}" "${{ secrets.SRV_CREDS }}":"${{ secrets.DEST_FOLDER }}"
+    - name: Run sshpass commands
+      uses: matheusvanzan/sshpass-action@v2
+      with:
+        host: ${{ secrets.SERVER_HOST }}
+        user: ${{ secrets.SERVER_USER }}
+        pass: ${{ secrets.SERVER_PASS }}
+        run: |
+          sshpass -e scp -o StrictHostKeyChecking=no "${{ secrets.BLD_FLDR }}" "${{ secrets.SRV_CREDS }}":"${{ secrets.DEST_FOLDER }}"
