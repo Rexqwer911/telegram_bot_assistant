@@ -2,13 +2,20 @@ stages:
   - build
   - deploy
 
-build-job:
+maven-build:
+  image: maven:3-jdk-17
   stage: build
-  script:
-    - mvn clean install -Pprod
+  script: "mvn package"
+  artifacts:
+    paths:
+      - target/gitlab-ci-demo.jar
 
-deploy-job:
+deploy-master:
+  before_script:
+    - apt-get update -qq && apt-get install -y -qq sshpass
   stage: deploy
   script:
-    - echo "Deploying application..."
-    - echo "Application successfully deployed."
+    - sshpass -V
+    - export SSHPASS=$CI_USER_PASS
+    - sshpass -e scp -o StrictHostKeyChecking=no target/gitlab-ci-demo.jar gitlab-ci@83.220.175.95:/home/gitlab-ci
+    - sshpass -e ssh -tt -o StrictHostKeyChecking=no gitlab-ci@83.220.175.95 sudo mv /home/gitlab-ci/gitlab-ci-demo.jar /opt/tgbot/
