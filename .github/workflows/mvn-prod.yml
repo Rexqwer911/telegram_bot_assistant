@@ -25,7 +25,7 @@ jobs:
       run: mvn -B package -Pprod --file pom.xml
     
     - name: Step 4 - List of the files in /target directory
-      run: ls -a "${{ secrets.TEST_FLDR }}"
+      run: ls -a ${{ secrets.TEST_FLDR }}
 
     - name: Run sshpass commands
       uses: matheusvanzan/sshpass-action@v2
@@ -33,4 +33,4 @@ jobs:
         host: ${{ secrets.SERVER_HOST }}
         user: ${{ secrets.SERVER_USER }}
         pass: ${{ secrets.SERVER_PASS }}
-        run: scp -o StrictHostKeyChecking=no "${{ secrets.BLD_FLDR }}" "${{ secrets.SRV_CREDS }}":"${{ secrets.DEST_FOLDER }}"
+        run: scp -o StrictHostKeyChecking=no ${{ secrets.BLD_FLDR }} ${{ secrets.SRV_CREDS }}:${{ secrets.DEST_FOLDER }}
