@@ -33,5 +33,4 @@ jobs:
         host: ${{ secrets.SERVER_HOST }}
         user: ${{ secrets.SERVER_USER }}
         pass: ${{ secrets.SERVER_PASS }}
-        run: |
-          sshpass -e scp -o StrictHostKeyChecking=no "${{ secrets.BLD_FLDR }}" "${{ secrets.SRV_CREDS }}":"${{ secrets.DEST_FOLDER }}"
+        run: scp -o StrictHostKeyChecking=no "${{ secrets.BLD_FLDR }}" "${{ secrets.SRV_CREDS }}":"${{ secrets.DEST_FOLDER }}"
