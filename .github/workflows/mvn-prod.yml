@@ -28,7 +28,7 @@ jobs:
       run: ls -a "${{ secrets.TEST_FLDR }}"
 
     - name: Step 5 - Install SSHPASS
-      run: sudo apt-get update -qq && apt-get install -y -qq sshpass
+      run: apt-get install -y -qq sshpass
 
     - name: Step 6 - Transfer File via SSH
       run: sshpass -e scp -o StrictHostKeyChecking=no "${{ secrets.BLD_FLDR }}" "${{ secrets.SRV_CREDS }}":"${{ secrets.DEST_FOLDER }}"
