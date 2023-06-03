@@ -27,10 +27,4 @@ jobs:
       run: mvn -B package -Pprod --file pom.xml
     
     - name: Step 4 - list the current directory
-      run: ls -a
-
-    - name: Step 5 - target directory
-      run: cd ./target
-
-    - name: Step 6 - list the current directory
-      run: ls -a
+      run: ls -a /target
