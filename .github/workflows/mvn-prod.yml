@@ -28,9 +28,9 @@ jobs:
     
     - name: Step 4 - list the current directory
       run: ls -a
-      
-      
-    - name: Step 4 - list the current directory
-      run: 
-        cd target
-        ls -a
+
+    - name: Step 5 - target directory
+      run: cd target
+
+    - name: Step 6 - list the current directory
+      run: ls -a
