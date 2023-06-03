@@ -27,10 +27,13 @@ jobs:
     - name: Step 4 - List of the files in /target directory
       run: ls -a ${{ secrets.TEST_FLDR }}
 
-    - name: Run sshpass commands
-      uses: matheusvanzan/sshpass-action@v2
+    - name: Step 5 - SSH transfer
+      uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.SERVER_HOST }}
-        user: ${{ secrets.SERVER_USER }}
-        pass: ${{ secrets.SERVER_PASS }}
-        run: scp -o StrictHostKeyChecking=no ${{ secrets.BLD_FLDR }} ${{ secrets.SRV_CREDS }}:${{ secrets.DEST_FOLDER }}
+        username: ${{ secrets.SERVER_USER }}
+        key: ${{ secrets.SERVER_RSA }}
+        port: 22
+        script: |
+          cd /opt/tgbot
+          ls -a
