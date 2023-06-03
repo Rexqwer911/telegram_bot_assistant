@@ -1,5 +1,5 @@
 
-name: Java CI with Maven
+name: Telegram Bot Assistant application CI/CD
 
 on:
   push:
@@ -23,19 +23,24 @@ jobs:
 
     - name: Step 3 - Build with Maven
       run: mvn -B package -Pprod --file pom.xml
-    
-    - name: Step 4 - List of the files in /target directory
-      run: ls -a ${{ secrets.TEST_FLDR }}
 
-    - name: Копирование файла на сервер
+    - name: Step 4 - SSH file transfer
       uses: appleboy/scp-action@master
       with:
         host: ${{ secrets.SERVER_HOST }}
         username: ${{ secrets.SERVER_USER }}
         key: ${{ secrets.SERVER_RSA }}
         port: 22
-        source: ./target/tgapp.jar
-        target: /opt/tgbot/test/tgapp.jar
+        source: ${{ secrets.BUILD_FOLDER }}
+        target: ${{ secrets.SERVER_JAR_PATH }}
 
-
-
+#    - name: Step 5 - SSH execution restart scripts
+#      uses: appleboy/ssh-action@master
+#      with:
+#        host: ${{ secrets.SERVER_HOST }}
+#        username: ${{ secrets.SERVER_USER }}
+#        key: ${{ secrets.SERVER_RSA }}
+#        port: 22
+#        script: |
+#          stop.sh
+#          start.sh
