@@ -25,17 +25,17 @@ jobs:
       run: mvn -B package -Pprod --file pom.xml
     
     - name: Step 4 - List of the files in /target directory
-      run: ls -a ./target
+      run: ls -a "${{ secrets.TEST_FLDR }}"
 
-    - name: Step 5 - Install SSH Client
-      run: sudo apt-get install openssh-client -y
-
-    - name: Step 6 - Copy SSH Key
-      run: |
-        mkdir -p ~/.ssh
-        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-        chmod 600 ~/.ssh/id_rsa
-        ssh-keyscan "${{ secrets.SRV_HOST }}" >> ~/.ssh/known_hosts
-
-    - name: Step 7 - Transfer File via SSH
-      run: scp -o StrictHostKeyChecking=no -P 22 ./target/tgapp.jar "${{ secrets.SRV_CREDS }}":"${{ secrets.DEST_FOLDER }}"
+#    - name: Step 5 - Install SSH Client
+#      run: sudo apt-get install openssh-client -y
+#
+#    - name: Step 6 - Copy SSH Key
+#      run: |
+#        mkdir -p ~/.ssh
+#        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+#        chmod 600 ~/.ssh/id_rsa
+#        ssh-keyscan "${{ secrets.SRV_HOST }}" >> ~/.ssh/known_hosts
+#
+#    - name: Step 7 - Transfer File via SSH
+#      run: scp -o StrictHostKeyChecking=no -P 22 ./target/tgapp.jar "${{ secrets.SRV_CREDS }}":"${{ secrets.DEST_FOLDER }}"
