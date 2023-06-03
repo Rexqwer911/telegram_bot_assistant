@@ -35,6 +35,7 @@ jobs:
         key: ${{ secrets.SERVER_RSA }}
         port: 22
         script: |
-          cd /opt/tgbot
+          cd /
           ls -a
+          start.sh
 
