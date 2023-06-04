@@ -138,7 +138,9 @@ public class VoiceMessageService {
     }
 
     private void decryptVoiceMessageWhisper(String wavFilePath, String txtFilePath) throws IOException, InterruptedException {
-        String command = "whisper " + wavFilePath +" --model base --language Russian -o "+ txtFilePath +" -f txt";
+        String command = "whisper " + wavFilePath +" --model " +
+                applicationProperties.getTelegram().getVoice().getModel() +
+                " --language Russian -o "+ txtFilePath +" -f txt";
 
         ProcessBuilder processBuilder = new ProcessBuilder();
         processBuilder.command("bash", "-c", command);

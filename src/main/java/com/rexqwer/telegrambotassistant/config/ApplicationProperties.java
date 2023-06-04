@@ -24,6 +24,7 @@ public class ApplicationProperties {
         private String wavPath;
         private String decryptedPath;
         private String ffmpegPath;
+        private String model;
     }
 
     @Data

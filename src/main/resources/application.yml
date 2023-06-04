@@ -44,5 +44,6 @@ application:
       wav-path:
       decrypted-path:
       ffmpeg-path:
+      model:
   gpt:
     token:
