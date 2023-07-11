@@ -1,6 +1,7 @@
 package com.rexqwer.telegrambotassistant.service;
 
 import com.rexqwer.telegrambotassistant.config.ApplicationProperties;
+import com.rexqwer.telegrambotassistant.event.DisableUserTasksEvent;
 import com.rexqwer.telegrambotassistant.event.InsistCompletedEvent;
 import com.rexqwer.telegrambotassistant.event.completion.IncomingMessageEvent;
 import com.rexqwer.telegrambotassistant.event.completion.OutgoingMessageEvent;
@@ -76,6 +77,9 @@ public class TelegramBotComponent extends TelegramLongPollingBot {
             applicationEventPublisher.publishEvent(new OutgoingMessageEvent(execute, messageId));
         } catch (TelegramApiException e) {
             log.error("Ошибка при отправке сообщения ботом. Message: {}, chatId: {}, replyMarkup: {}", text, chatId, replyKeyboard, e);
+            if (e.getMessage().contains("bot was blocked by the user")) {
+                applicationEventPublisher.publishEvent(new DisableUserTasksEvent(chatId));
+            }
         }
     }
 
@@ -91,6 +95,9 @@ public class TelegramBotComponent extends TelegramLongPollingBot {
             applicationEventPublisher.publishEvent(new OutgoingMessageEvent(execute));
         } catch (TelegramApiException e) {
             log.error("Ошибка при отправке сообщения ботом. Message: {}, chatId: {}, replyMarkup: {}", text, chatId, replyKeyboard, e);
+            if (e.getMessage().contains("bot was blocked by the user")) {
+                applicationEventPublisher.publishEvent(new DisableUserTasksEvent(chatId));
+            }
         }
     }
 

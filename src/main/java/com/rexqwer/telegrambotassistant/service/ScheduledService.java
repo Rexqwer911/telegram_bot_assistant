@@ -23,6 +23,7 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -130,6 +131,18 @@ public class ScheduledService {
         } else {
             log.error("Не найдено сообщение с tgId {}", tgIdMessage);
         }
+    }
+
+    public void disableScheduledMessagesForChatId(String chatId) {
+        List<ScheduledTask> allByActiveTrue = scheduledTaskRepository.findAllByActiveTrue();
+        for (ScheduledTask scheduledTask : allByActiveTrue) {
+            if (Objects.equals(scheduledTask.getMessage().getChatId(), chatId)) {
+                scheduledTask.setActive(false);
+                scheduledTaskRepository.save(scheduledTask);
+                log.info("Отключили задание {}, т.к. пользователь заблокировал бота", scheduledTask.getId());
+            }
+        }
+
     }
 
     private LocalDateTime getNextStartTime(ScheduledTask scheduledTask, boolean insistently) {

@@ -47,7 +47,7 @@ public class Message implements Serializable {
     private MessageBranch messageBranch;
 
     /**
-     * Ветка сообщений, к которой принадлежит само сообщение
+     * Задание по расписанию, которое обращается к данному сообщению
      */
     @ManyToOne
     @JoinColumn(name = "scheduled_task_id")

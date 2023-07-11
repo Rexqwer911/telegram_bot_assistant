@@ -18,4 +18,6 @@ public interface ScheduledTaskRepository extends JpaRepository<ScheduledTask, Lo
 
     List<ScheduledTask> findAllByUserAndActiveTrue(User user);
 
+    List<ScheduledTask> findAllByActiveTrue();
+
 }

@@ -68,5 +68,11 @@ public class ApplicationEventListener {
         voiceMessageService.processVoiceMessage(event.getFileName(),
                 telegramBotComponent.getFileUrl(event.getFileId()), event.getChatId());
     }
+
+    @Async
+    @EventListener
+    public void handleDisableUserTasksEvent(DisableUserTasksEvent event) {
+        scheduledService.disableScheduledMessagesForChatId(event.getChatId());
+    }
 }
 
