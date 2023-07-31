@@ -3,6 +3,7 @@ package com.rexqwer.telegrambotassistant.repository;
 import com.rexqwer.telegrambotassistant.domain.Message;
 import com.rexqwer.telegrambotassistant.domain.reference.MessageType;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -20,4 +21,7 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
     Optional<Message> findByMessageId(String messageId);
 
     Optional<Message> findFirstByChatIdOrderByCreatedAtAsc(String chatId);
+
+    @Query(nativeQuery = true, value = "SELECT * FROM message WHERE message.scheduled_task_id = :scheduledTaskId ORDER BY message.created_at DESC LIMIT 1 OFFSET 1")
+    Optional<Message> previousSentScheduled(Long scheduledTaskId);
 }

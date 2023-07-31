@@ -93,4 +93,8 @@ public class MessageService {
     public User findUserByChatId(String chatId) {
         return messageRepository.findFirstByChatIdOrderByCreatedAtAsc(chatId).map(Message::getUser).orElse(null);
     }
+
+    public Message findPreviousMessageForScheduledTask(ScheduledTask scheduledTask) {
+        return messageRepository.previousSentScheduled(scheduledTask.getId()).orElse(null);
+    }
 }

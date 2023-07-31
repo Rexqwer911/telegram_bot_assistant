@@ -62,7 +62,7 @@ public class ApplicationEventListener {
         }
     }
 
-    @Async
+    @Async("whisperExecutor")
     @EventListener
     public void handleDownloadVoiceMessageEvent(TelegramBotDownloadVoiceMessageEvent event) {
         voiceMessageService.processVoiceMessage(event.getFileName(),
