@@ -22,6 +22,6 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
 
     Optional<Message> findFirstByChatIdOrderByCreatedAtAsc(String chatId);
 
-    @Query(nativeQuery = true, value = "SELECT * FROM message WHERE message.scheduled_task_id = :scheduledTaskId ORDER BY message.created_at DESC LIMIT 1 OFFSET 1")
+    @Query(nativeQuery = true, value = "SELECT * FROM message WHERE message.scheduled_task_id = :scheduledTaskId ORDER BY message.created_at DESC OFFSET 1 LIMIT 1")
     Optional<Message> previousSentScheduled(Long scheduledTaskId);
 }

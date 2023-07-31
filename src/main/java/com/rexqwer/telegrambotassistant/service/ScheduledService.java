@@ -6,6 +6,7 @@ import com.rexqwer.telegrambotassistant.domain.User;
 import com.rexqwer.telegrambotassistant.enums.MessageTypeEnum;
 import com.rexqwer.telegrambotassistant.enums.ScheduledTaskTypeEnum;
 import com.rexqwer.telegrambotassistant.event.SendMessageEvent;
+import com.rexqwer.telegrambotassistant.event.deletion.SendMessageDeletionEvent;
 import com.rexqwer.telegrambotassistant.repository.MessageTypeRepository;
 import com.rexqwer.telegrambotassistant.repository.ScheduledTaskRepository;
 import com.rexqwer.telegrambotassistant.service.message.MessageService;
@@ -88,6 +89,14 @@ public class ScheduledService {
                     scheduledTask
             );
             if (scheduledTask.getInsistent()) {
+                Message previousMessageForScheduledTask = messageService.findPreviousMessageForScheduledTask(scheduledTask);
+                if (previousMessageForScheduledTask != null) {
+                    log.info("Попытка удалить предыдущее напоминание для задания {}", scheduledTask.getId());
+                    applicationEventPublisher.publishEvent(new SendMessageDeletionEvent(previousMessageForScheduledTask.getId(),
+                            scheduledTask.getMessage().getChatId(), previousMessageForScheduledTask.getMessageId()));
+                } else {
+                    log.info("Не нашли предыдущее сообщение");
+                }
                 applicationEventPublisher.publishEvent(new SendMessageEvent(text,
                         scheduledTask.getMessage().getChatId(),
                         InlineKeyboardMarkup.builder()

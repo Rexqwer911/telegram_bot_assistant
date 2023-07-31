@@ -95,6 +95,7 @@ public class MessageService {
     }
 
     public Message findPreviousMessageForScheduledTask(ScheduledTask scheduledTask) {
+        log.info("scheduledTask {}", scheduledTask.getId());
         return messageRepository.previousSentScheduled(scheduledTask.getId()).orElse(null);
     }
 }
