@@ -2,7 +2,7 @@ name: Telegram Bot Assistant application CI/CD
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "prod" ]
 
 jobs:
   build:
