@@ -65,8 +65,7 @@ public class ApplicationEventListener {
     @Async("whisperExecutor")
     @EventListener
     public void handleDownloadVoiceMessageEvent(TelegramBotDownloadVoiceMessageEvent event) {
-        voiceMessageService.processVoiceMessage(event.getFileName(),
-                telegramBotComponent.getFileUrl(event.getFileId()), event.getChatId());
+        voiceMessageService.processVoiceMessage(telegramBotComponent.getFileUrl(event.getFileId()), event.getFileName(), event.getChatId());
     }
 
     @Async

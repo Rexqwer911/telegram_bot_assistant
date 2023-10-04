@@ -8,6 +8,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.web.reactive.function.client.WebClient;
 
 @EnableConfigurationProperties({ApplicationProperties.class})
 @Configuration
@@ -16,10 +17,15 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 public class ApplicationConfiguration {
 
     private final DialogService dialogService;
+    private final ApplicationProperties applicationProperties;
 
     @Bean("reminderDialogStructure")
     public DialogStructure reminderDialogStructure() {
         return dialogService.buildDialogStructure("branches/reminder.txt");
     }
 
+    @Bean("whisperWebClient")
+    public WebClient whisperWebClient() {
+        return WebClient.create(applicationProperties.getTelegram().getVoice().getUrl());
+    }
 }

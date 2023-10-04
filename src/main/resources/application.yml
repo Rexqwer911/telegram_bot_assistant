@@ -40,10 +40,6 @@ application:
     username:
     voice:
       active: false
-      download-path:
-      wav-path:
-      decrypted-path:
-      ffmpeg-path:
-      model:
+      url:
   gpt:
     token:

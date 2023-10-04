@@ -20,11 +20,7 @@ public class ApplicationProperties {
     @Data
     public static class Voice {
         private Boolean active;
-        private String downloadPath;
-        private String wavPath;
-        private String decryptedPath;
-        private String ffmpegPath;
-        private String model;
+        private String url;
     }
 
     @Data
