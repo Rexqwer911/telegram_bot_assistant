@@ -23,15 +23,4 @@ public class AsyncConfiguration {
         executor.setThreadNamePrefix("app-task-");
         return executor;
     }
-
-    @Bean(name = "whisperExecutor")
-    public TaskExecutor whisperExecutor() {
-        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setCorePoolSize(1);
-        executor.setMaxPoolSize(4);
-        executor.setQueueCapacity(100);
-        executor.setThreadNamePrefix("whisper-task-");
-        executor.initialize();
-        return executor;
-    }
 }

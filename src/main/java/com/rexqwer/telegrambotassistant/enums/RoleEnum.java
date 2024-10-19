@@ -1,5 +1,8 @@
 package com.rexqwer.telegrambotassistant.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum RoleEnum {
 
     DEFAULT(1),
@@ -12,7 +15,4 @@ public enum RoleEnum {
         this.code = code;
     }
 
-    public Integer getCode() {
-        return code;
-    }
 }

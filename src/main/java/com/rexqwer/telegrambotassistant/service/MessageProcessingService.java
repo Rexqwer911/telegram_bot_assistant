@@ -1,6 +1,5 @@
 package com.rexqwer.telegrambotassistant.service;
 
-import com.rexqwer.telegrambotassistant.config.ApplicationProperties;
 import com.rexqwer.telegrambotassistant.domain.Message;
 import com.rexqwer.telegrambotassistant.domain.User;
 import com.rexqwer.telegrambotassistant.domain.reference.MessageType;
@@ -26,9 +25,7 @@ public class MessageProcessingService {
     private final MessageService messageService;
     private final MessageTypeService messageTypeService;
     private final CommandService commandService;
-    private final VoiceMessageService voiceMessageService;
     private final MessageBranchSelector messageBranchSelector;
-    private final ApplicationProperties applicationProperties;
     private final ApplicationEventPublisher applicationEventPublisher;
 
     public void processMessage(Update update) {
@@ -56,11 +53,7 @@ public class MessageProcessingService {
                 }
             } else {
                 if (update.getMessage().hasVoice()) {
-                    if (applicationProperties.getTelegram().getVoice().getActive()) {
-                        voiceMessageService.downloadVoiceMessage(update.getMessage().getVoice().getFileId(), user, update.getMessage().getChatId().toString());
-                    } else {
-                        log.info("Скачивание голосовых отключено");
-                    }
+                    // todo voice processing
                 } else {
                     log.error("undefined update message");
                 }

@@ -25,7 +25,6 @@ import java.util.List;
 
 @Slf4j
 @Service
-
 public class VoiceMessageService {
 
     private final ApplicationEventPublisher applicationEventPublisher;

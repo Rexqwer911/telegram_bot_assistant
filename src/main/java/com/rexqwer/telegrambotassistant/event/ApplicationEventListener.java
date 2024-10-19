@@ -1,13 +1,11 @@
 package com.rexqwer.telegrambotassistant.event;
 
-import com.rexqwer.telegrambotassistant.config.ApplicationProperties;
 import com.rexqwer.telegrambotassistant.event.completion.IncomingMessageEvent;
 import com.rexqwer.telegrambotassistant.event.completion.OutgoingMessageEvent;
 import com.rexqwer.telegrambotassistant.event.deletion.SendMessageDeletionEvent;
 import com.rexqwer.telegrambotassistant.service.MessageProcessingService;
 import com.rexqwer.telegrambotassistant.service.ScheduledService;
 import com.rexqwer.telegrambotassistant.service.TelegramBotComponent;
-import com.rexqwer.telegrambotassistant.service.VoiceMessageService;
 import com.rexqwer.telegrambotassistant.service.message.MessageResponseService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +21,6 @@ public class ApplicationEventListener {
     private final MessageProcessingService messageProcessingService;
     private final MessageResponseService messageResponseService;
     private final TelegramBotComponent telegramBotComponent;
-    private final VoiceMessageService voiceMessageService;
     private final ScheduledService scheduledService;
 
     @Async
@@ -60,12 +57,6 @@ public class ApplicationEventListener {
         } else {
             messageResponseService.processOutgoingMessageResponse(event.getMessage());
         }
-    }
-
-    @Async("whisperExecutor")
-    @EventListener
-    public void handleDownloadVoiceMessageEvent(TelegramBotDownloadVoiceMessageEvent event) {
-        voiceMessageService.processVoiceMessage(telegramBotComponent.getFileUrl(event.getFileId()), event.getFileName(), event.getChatId());
     }
 
     @Async
