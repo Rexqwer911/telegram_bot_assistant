@@ -1,5 +1,8 @@
 package com.rexqwer.telegrambotassistant.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum ScheduledTaskTypeEnum {
 
     DAILY(1),
@@ -11,10 +14,6 @@ public enum ScheduledTaskTypeEnum {
 
     ScheduledTaskTypeEnum(Integer code) {
         this.code = code;
-    }
-
-    public Integer getCode() {
-        return code;
     }
 
 }

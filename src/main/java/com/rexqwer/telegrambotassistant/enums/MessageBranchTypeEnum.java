@@ -1,5 +1,8 @@
 package com.rexqwer.telegrambotassistant.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum MessageBranchTypeEnum {
 
     REMINDER_BRANCH(1),
@@ -9,10 +12,6 @@ public enum MessageBranchTypeEnum {
 
     MessageBranchTypeEnum(Integer code) {
         this.code = code;
-    }
-
-    public Integer getCode() {
-        return code;
     }
 
 }

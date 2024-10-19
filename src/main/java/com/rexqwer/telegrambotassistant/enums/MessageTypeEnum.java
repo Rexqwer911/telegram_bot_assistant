@@ -1,5 +1,8 @@
 package com.rexqwer.telegrambotassistant.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum MessageTypeEnum {
 
     UNKNOWN(1, ""),
@@ -17,11 +20,4 @@ public enum MessageTypeEnum {
         this.pattern = pattern;
     }
 
-    public Integer getCode() {
-        return code;
-    }
-
-    public String getPattern() {
-        return pattern;
-    }
 }
